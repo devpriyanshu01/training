@@ -13,6 +13,7 @@ func main() {
 	writer := bufio.NewWriter(os.Stdout)
 	defer writer.Flush()
 
+	//input n & q
 	var n, q int
 	fmt.Fscan(reader, &n, &q)
 
