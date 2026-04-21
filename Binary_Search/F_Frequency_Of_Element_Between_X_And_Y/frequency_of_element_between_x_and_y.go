@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"log"
 	"os"
 	"sort"
 )
@@ -29,14 +28,11 @@ func main() {
 		var x, y int
 		fmt.Fscan(reader, &x, &y)
 
-		log.Printf("for x = %d & y = %d", x, y)
-		if x > slice[n-1] {
+		if x > slice[n-1] || x > y {
 			fmt.Fprintln(writer, 0)
 		} else {
 			indexX := binarySearch(slice, n, x)
 			indexY := binarySearch2(slice, n, y)
-
-			log.Printf("indexX = %d & indexY = %d", indexX, indexY)
 
 			ans := indexY - indexX + 1
 			fmt.Fprintln(writer, ans)
@@ -51,26 +47,24 @@ func binarySearch(slice []int, n, x int) int {
 	index := -1
 
 	for l <= r {
-		fmt.Println("m = ", m)
-		if x < slice[m] {
-			l = m + 1
-		} else {
+		if slice[m] >= x {
 			index = m
-			fmt.Println("index = ", index)
 			r = m - 1
+		} else {
+			l = m + 1
 		}
 		m = (l + r) / 2
 	}
 	return index
 }
 
-func binarySearch2(slice []int, n, x int) int {
+func binarySearch2(slice []int, n, y int) int {
 	l, r := 0, n-1
 	m := (l + r) / 2
 
 	index := -1
 	for l <= r {
-		if x <= slice[m] {
+		if slice[m] <= y {
 			index = m
 			l = m + 1
 		} else {
