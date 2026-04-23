@@ -15,10 +15,26 @@ func main() {
 	fmt.Fscan(reader, &n, &q)
 
 	//generate the factors count
-	factors := make([]int, n)
+	factors := make([]int, n+1)
 	for i := 1; i <= n; i++ {
-		for j := 1; j <= n; j += i {
+		for j := i; j <= n; j += i {
 			factors[j]++
+		}
+	}
+
+	prefix := make([]int, n+1)
+	count := 0
+
+	for i, val := range factors {
+		if i == 0 || i == 1 {
+			prefix[i] = 0
+		} else {
+			if val == 2 {
+				count++
+				prefix[i] = count
+			} else {
+				prefix[i] = count
+			}
 		}
 	}
 
@@ -26,14 +42,7 @@ func main() {
 		var l, r int
 		fmt.Fscan(reader, &l, &r)
 
-		primes := 0
-		for j := l; j <= r; j++ {
-			if factors[j] == 2 {
-				primes++
-			}
-		}
-
-		fmt.Fprintln(writer, primes)
-
+		ans := prefix[r] - prefix[l-1]
+		fmt.Fprintln(writer, ans)
 	}
 }
