@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"math"
 	"os"
 )
 
@@ -12,20 +11,10 @@ func main() {
 	writer := bufio.NewWriter(os.Stdout)
 	defer writer.Flush()
 
-	var q int 
+	var q int
 	fmt.Fscan(reader, &q)
 
-	queries := make([]int, q)
-	max := math.MinInt
-	for i := 0; i < q; i++ {
-		var x int
-		fmt.Fscan(reader, &x)
-		queries[i] = x	
-
-		if x > max {
-			max = x
-		}
-	}
+	max := 1000000
 
 	//prepare isPrime slice
 	spf := make([]int, max+1)
@@ -33,34 +22,30 @@ func main() {
 		spf[i] = i
 	}
 
-	for i := 2; i < max; i++ {
+	for i := 2; i < max; i++ { //logic is crucial
 		if spf[i] == i {
-			for j := i*i; j <= max; j += i {
+			for j := i * i; j <= max; j += i {
 				spf[j] = min(spf[j], i)
 			}
 		}
 	}
 
 	//now find prime factorization of each queries
-	
-	for _, x := range queries {
-		myMap := make(map[int]int)
-		var factors []int
-		for x > 1 {
-			pf := spf[x]	
-			factors = append(factors, pf)
-			myMap[pf]++
-			x = x/pf
-		}
 
-		for _, val := range factors {
-			_, exists := myMap[val]
-			if exists {
-				fmt.Fprintf(writer, "%d^%d ", val, myMap[val])
-				delete(myMap, val)
+	for i := 0; i < q; i++ {
+		var x int
+		fmt.Fscan(reader, &x)
+
+		for x > 1 {
+			pf := spf[x]
+			e := 0
+			for x % pf == 0 {
+				x = x/pf
+				e++
 			}
+			fmt.Fprintf(writer, "%d^%d ", pf, e)
 		}
 		fmt.Fprintln(writer)
 	}
-	
+
 }
