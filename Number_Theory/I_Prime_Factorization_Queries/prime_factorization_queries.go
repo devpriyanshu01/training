@@ -33,7 +33,7 @@ func main() {
 		spf[i] = i
 	}
 
-	for i := 2; i <= max; i++ {
+	for i := 2; i < max; i++ {
 		if spf[i] == i {
 			for j := i*i; j <= max; j += i {
 				spf[j] = min(spf[j], i)
