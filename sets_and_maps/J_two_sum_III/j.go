@@ -21,33 +21,18 @@ func main() {
 		fmt.Fscan(reader, &slice[i])
 	}
 
-	//prepare 2 maps to help us to search quickly
-	freq := make(map[int]int)
+	//store the value of the given slice into a map with their indexes as values.
+	myMap := make(map[int]int)
+	count := 0
 
-	//create freq map for handling duplicate elements
 	for _, val := range slice {
-		freq[val]++
+		freq, exists := myMap[k-val]
+		if exists {
+			count += freq
+			// delete(myMap, k-val)
+		}
+		myMap[val]++
 	}
 
-	twoSumPairs := 0
-	//main logic
-	for _, val := range slice {
-		if freq[val] == 0 {
-			continue
-		}
-		reqd := k - val
-
-		if freq[reqd] > 0 && freq[val] > 0 {
-			if reqd == val {
-				if freq[reqd] < 2 {
-					continue
-				}
-			}
-
-			freq[reqd]--
-			freq[val]--
-			twoSumPairs++
-		}
-	}
-	fmt.Fprintln(writer, twoSumPairs)
+	fmt.Fprintln(writer, count)
 }
